@@ -15,6 +15,22 @@ def _env(name: str, default: str = "") -> str:
     return os.environ.get(name, default)
 
 
+def _default_data_dir() -> Path:
+    configured = _env("VERDICT_DATA_DIR")
+    if configured:
+        return Path(configured)
+    hhgoa = ROOT / "data" / "hhgoa"
+    return hhgoa if hhgoa.exists() else ROOT / "data" / "synthetic"
+
+
+def _default_policy_file() -> Path:
+    configured = _env("VERDICT_POLICY")
+    if configured:
+        return Path(configured)
+    name = "hhgoa.yaml" if _default_data_dir().name == "hhgoa" else "policy.yaml"
+    return ROOT / "verdict" / "policy" / name
+
+
 @dataclass(frozen=True)
 class Settings:
     # TigerGraph
@@ -31,11 +47,10 @@ class Settings:
 
     # Data
     # real dataset goes in data/hhgoa; until it exists we fall back to the synthetic stand-in
-    data_dir: Path = field(default_factory=lambda: Path(_env("VERDICT_DATA_DIR", str(ROOT / "data" / "hhgoa")
-                                                             if (ROOT / "data" / "hhgoa").exists() else str(ROOT / "data" / "synthetic"))))
+    data_dir: Path = field(default_factory=_default_data_dir)
     work_dir: Path = field(default_factory=lambda: Path(_env("VERDICT_WORK_DIR", str(ROOT / "artifacts"))))
     schema_map: Path = field(default_factory=lambda: Path(_env("VERDICT_SCHEMA_MAP", str(ROOT / "verdict" / "data" / "schema_map.yaml"))))
-    policy_file: Path = field(default_factory=lambda: Path(_env("VERDICT_POLICY", str(ROOT / "verdict" / "policy" / "policy.yaml"))))
+    policy_file: Path = field(default_factory=_default_policy_file)
     answers_dir: Path = field(default_factory=lambda: Path(_env("VERDICT_ANSWERS_DIR", "")) if _env("VERDICT_ANSWERS_DIR") else None)
 
     # LLM

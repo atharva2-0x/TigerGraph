@@ -70,7 +70,7 @@ def prepare(data_dir: Path | None = None, out_dir: Path | None = None) -> dict:
     if tm.get("card_id") and tm["card_id"] in tx:
         t["card_fp"] = tx[tm["card_id"]].map(_clean)
     else:
-        key = tx[tm["card_key_columns"]].astype(str).agg("|".join, axis=1)
+        key = tx[tm["card_key_columns"]].fillna("").astype(str).agg("|".join, axis=1)
         t["card_fp"] = key.map(lambda s: "FP-" + _h(s, 10))
     t["region_key"] = [f"{_num_str(a)}|{_num_str(b)}" if _num_str(a) else "" for a, b in zip(tx[tm["addr1"]], tx[tm["addr2"]])]
     t["p_email"] = tx[tm["p_email"]].map(_clean).str.lower()
@@ -153,8 +153,8 @@ def prepare(data_dir: Path | None = None, out_dir: Path | None = None) -> dict:
         "status": "CLOSED",
         "opened_at": pd.to_datetime(cc[cm["opened_at"]], errors="coerce").dt.strftime("%Y-%m-%d %H:%M:%S") if cm.get("opened_at") in cc else "",
         "closed_at": pd.to_datetime(cc[cm["closed_at"]], errors="coerce").dt.strftime("%Y-%m-%d %H:%M:%S") if cm.get("closed_at") in cc else "",
-        "outcome": np.where(cc[cm["outcome"]].astype(str).isin(fraud_vals), "CONFIRMED_FRAUD", "CLEARED"),
-        "pattern": cc[cm["pattern"]].map(_clean) if cm.get("pattern") in cc else "",
+        "outcome": np.where(cc[cm["outcome"]].astype(str).str.strip().str.upper().isin({v.upper() for v in fraud_vals}), "CONFIRMED_FRAUD", "CLEARED"),
+        "pattern": cc[cm["pattern"]].map(_clean).str.upper() if cm.get("pattern") in cc else "",
         "evidence_requested": cc[cm["evidence_requested"]].map(_clean) if cm.get("evidence_requested") in cc else "",
         "evidence_result": cc[cm["evidence_result"]].map(_clean) if cm.get("evidence_result") in cc else "",
         "actions_taken": cc[cm["actions_taken"]].map(_clean) if cm.get("actions_taken") in cc else "",
@@ -179,7 +179,7 @@ def prepare(data_dir: Path | None = None, out_dir: Path | None = None) -> dict:
 
     pack = pd.DataFrame({
         "case_id": cp[pm["case_id"]].map(_clean),
-        "trigger_type": cp[pm["trigger_type"]].map(_clean),
+        "trigger_type": cp[pm["trigger_type"]].map(_clean).str.upper(),
         "trigger_time": pd.to_datetime(cp[pm["trigger_time"]], errors="coerce").dt.strftime("%Y-%m-%d %H:%M:%S") if pm.get("trigger_time") in cp else "",
         "card_id": cp[pm["card_id"]].map(_clean) if pm.get("card_id") in cp else "",
         "customer_id": cp[pm["customer_id"]].map(_clean) if pm.get("customer_id") in cp else "",
