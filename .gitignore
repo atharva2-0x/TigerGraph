@@ -1,0 +1,9 @@
+data/*
+!data/sample/
+.env
+__pycache__/
+*.pyc
+.venv/
+node_modules/
+ui/dist/
+artifacts/
