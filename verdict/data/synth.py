@@ -89,7 +89,9 @@ class Synth:
     def _device(self) -> Device:
         r = self.rng
         dtype = r.choice(["desktop", "mobile"])
-        return Device(str(r.choice(DEVICE_INFOS)), str(r.choice(OSES)), str(r.choice(BROWSERS)), str(r.choice(SCREENS)), str(dtype))
+        browser = f"{r.choice(BROWSERS)}.{int(r.integers(0, 6000))}"
+        screen = f"{r.choice(SCREENS)}" if r.random() < 0.5 else f"{int(r.integers(360, 2560))}x{int(r.integers(640, 1600))}"
+        return Device(str(r.choice(DEVICE_INFOS)), str(r.choice(OSES)), browser, screen, str(dtype))
 
     def build_world(self) -> None:
         r = self.rng

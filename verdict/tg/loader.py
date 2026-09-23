@@ -68,3 +68,14 @@ def load_all(prepared: Path | None = None) -> dict:
         report[job] = {"chunks": n, "secs": round(time.time() - t0, 1)}
     report["vertices"] = c.getVertexCount("*")
     return report
+
+
+VERTEX_TYPES = ["Transaction", "Card", "Customer", "Device", "EmailDomain", "Region", "FraudCase", "Evidence",
+                "EvidenceRequest", "CaseAction", "Pattern", "DocChunk", "FeatureStat"]
+
+
+def clear_data() -> None:
+    """Delete all vertices (and therefore edges) while keeping schema, jobs and installed queries."""
+    c = conn("ops")
+    for vt in VERTEX_TYPES:
+        c.delVertices(vt)
