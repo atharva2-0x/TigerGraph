@@ -1,0 +1,1 @@
+{"ok": true, "replay": true, "llm": false, "model": "replay", "graph_access": "mcp", "graph": "Verdict", "dataset": "HHGOA-format sample dataset", "synthetic": false}

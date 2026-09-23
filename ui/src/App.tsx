@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { get, pct, post } from "./api";
+import { REPLAY, get, pct, post } from "./api";
 import GraphView from "./GraphView";
 import { Ledger, PatternBars, Reliability, Trajectory, Weights } from "./Charts";
 
@@ -123,7 +123,7 @@ export default function App() {
         </nav>
         <div className="chips">
           <span className="chip">
-            <span className="dot" style={{ background: health?.ok ? "var(--good)" : "var(--critical)" }} /> TigerGraph · {health?.graph || "?"}
+            <span className="dot" style={{ background: health?.ok ? "var(--good)" : "var(--critical)" }} /> {REPLAY ? "Replay" : "TigerGraph"} · {health?.graph || "?"}
           </span>
           <span className="chip">
             <span className="dot" style={{ background: health?.graph_access === "mcp" ? "var(--good)" : "var(--warning)" }} />
@@ -131,14 +131,20 @@ export default function App() {
           </span>
           <span className="chip">
             <span className="dot" style={{ background: health?.llm ? "var(--good)" : "var(--warning)" }} />
-            {health?.llm ? `Claude · ${health.model}` : "LLM offline (templates)"}
+            {REPLAY ? "static snapshot" : health?.llm ? `Claude · ${health.model}` : "LLM offline (templates)"}
           </span>
         </div>
       </header>
       <main>
-        {health?.synthetic && (
+        {REPLAY && (
           <div className="warn-banner">
-            Running on the <b>synthetic stand-in dataset</b> (same shape as HHGOA_IEEE). Place the official files in <span className="mono">data/hhgoa</span> and run{" "}
+            <b>Replay mode</b>: browsing precomputed investigations{health?.dataset ? <> on the <b>{health.dataset}</b></> : null}. The live agent (TigerGraph, MCP,
+            evidence requests, approvals, learning) runs with <span className="mono">docker compose up</span>, see the repository README.
+          </div>
+        )}
+        {!REPLAY && health?.synthetic && (
+          <div className="warn-banner">
+            Running on the <b>HHGOA-format sample dataset</b>. Place the official files in <span className="mono">data/hhgoa</span> and run{" "}
             <span className="mono">verdict bootstrap</span> to switch.
           </div>
         )}
@@ -166,7 +172,7 @@ function Queue({ cases, open, refresh }: { cases: any[]; open: (id: string) => v
     refresh();
   };
   const start = async (id: string) => {
-    await post(`/api/cases/${id}/investigate`);
+    if (!REPLAY) await post(`/api/cases/${id}/investigate`);
     open(id);
   };
   const newTrigger = async () => {
@@ -194,7 +200,7 @@ function Queue({ cases, open, refresh }: { cases: any[]; open: (id: string) => v
           <div className="l">awaiting human approval</div>
         </div>
       </div>
-      <div className="panel">
+      {!REPLAY && (<div className="panel">
         <h3>New trigger</h3>
         <div className="trigger-form">
           <select value={trig.trigger_type} onChange={(e) => setTrig({ ...trig, trigger_type: e.target.value })}>
@@ -208,13 +214,13 @@ function Queue({ cases, open, refresh }: { cases: any[]; open: (id: string) => v
             Investigate
           </button>
         </div>
-      </div>
+      </div>)}
       <div className="panel">
         <div className="row" style={{ justifyContent: "space-between" }}>
           <h3>Benchmark case pack</h3>
-          <button className="btn" disabled={busy} onClick={runAll}>
+          {!REPLAY && <button className="btn" disabled={busy} onClick={runAll}>
             {busy ? "Running…" : "Investigate all new"}
-          </button>
+          </button>}
         </div>
         <div className="table-wrap">
           <table>
@@ -288,6 +294,7 @@ function Room({ id, onChange }: { id: string; onChange: () => void }) {
     setLiveEvents([]);
     setLearn(null);
     load();
+    if (REPLAY) return;
     const es = new EventSource(`/api/cases/${id}/events`);
     es.onmessage = (m) => {
       const ev = JSON.parse(m.data);

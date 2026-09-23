@@ -108,6 +108,12 @@ verdict benchmark
 
 Savanna works too: set `TG_HOST` and the credentials (or `TG_API_TOKEN`) in `.env` and run the same commands. Use TigerGraph 4.2+ for vector support.
 
+### Hosted replay (Vercel)
+The live agent needs TigerGraph, the MCP server and a long-running API, so it runs with Docker. For a shareable link,
+`verdict export-demo` snapshots the stored investigations into `ui/public/demo/`, and Vercel serves the console as a
+static, read-only replay (`vercel.json` builds `ui/` with `VITE_REPLAY=1`; `.vercelignore` keeps the Python agent out of
+the static deploy). After a new benchmark run: `verdict export-demo`, commit and push, and Vercel redeploys.
+
 ### Using the official HHGOA_IEEE dataset
 1. Put the files in `data/hhgoa/`. It's git-ignored; never commit the dataset.
 2. Check the column names in [`verdict/data/schema_map.yaml`](verdict/data/schema_map.yaml) against the dataset README.

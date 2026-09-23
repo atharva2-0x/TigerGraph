@@ -6,6 +6,7 @@
   verdict investigate CASE           investigate one case and print the result
   verdict serve                      start the API + analyst UI
   verdict ops-mcp                    run the VERDICT ops MCP server (stdio)
+  verdict export-demo                snapshot stored investigations into ui/public/demo for static hosting (Vercel)
   individual steps: prepare | init | load | install | algos | calibrate | ingest | discover | status
 """
 from __future__ import annotations
@@ -75,7 +76,7 @@ def main(argv: list[str] | None = None) -> None:
     sv = sub.add_parser("serve")
     sv.add_argument("--port", type=int, default=8000)
     sv.add_argument("--host", default="0.0.0.0")
-    for n in ("prepare", "init", "load", "install", "algos", "calibrate", "ingest", "discover", "status", "ops-mcp"):
+    for n in ("prepare", "init", "load", "install", "algos", "calibrate", "ingest", "discover", "status", "ops-mcp", "export-demo"):
         sub.add_parser(n)
     a = ap.parse_args(argv)
 
@@ -147,6 +148,10 @@ def main(argv: list[str] | None = None) -> None:
         import uvicorn
 
         uvicorn.run("verdict.api.app:app", host=a.host, port=a.port, log_level="info")
+    elif a.cmd == "export-demo":
+        from verdict.outputs.export_demo import export
+
+        _p(export())
     elif a.cmd == "ops-mcp":
         from verdict.ops_mcp.server import main as ops_main
 
