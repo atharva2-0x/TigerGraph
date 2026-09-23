@@ -29,11 +29,14 @@ from verdict.scoring.nba import NbaEngine
 SIGNATURES = {  # documented-pattern signatures (rule view, used for explanation and as a fallback classifier)
     "CARD_TESTING": ["ct_small_burst", "ct_large_after_small"],
     "CNP_NEW_DEVICE": ["device_new_flag", "device_unseen", "proxy"],
+    "CARD_NOT_PRESENT_NEW_DEVICE": ["device_new_flag", "device_unseen", "proxy"],
+    "CARD_NOT_PRESENT_FRAUD": ["device_new_flag", "device_unseen", "proxy"],
     "OUT_OF_REGION": ["region_novel_card_present", "concurrent_home_activity"],
+    "OUT_OF_REGION_USE": ["region_novel_card_present", "concurrent_home_activity"],
     "ACCOUNT_TAKEOVER": ["match_fail", "email_changed", "mixed_channel_new_device"],
     "SHARED_ENTITY_RING": ["ring_linked_high_risk", "ring_linked_prior_fraud", "device_other_susp_cards"],
 }
-UNDOCUMENTED_LABELS = {"UNCLASSIFIED", "OTHER", "UNKNOWN"}
+UNDOCUMENTED_LABELS = {"UNCLASSIFIED", "OTHER", "UNKNOWN", "UNDOCUMENTED"}
 
 
 def _now() -> str:

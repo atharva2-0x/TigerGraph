@@ -23,7 +23,10 @@ OUT = settings.work_dir / "discovered_patterns.json"
 SIGNATURES = {
     "CARD_TESTING": ["ct_small_burst", "ct_large_after_small"],
     "CNP_NEW_DEVICE": ["device_new_flag", "device_unseen", "proxy"],
+    "CARD_NOT_PRESENT_NEW_DEVICE": ["device_new_flag", "device_unseen", "proxy"],
+    "CARD_NOT_PRESENT_FRAUD": ["device_new_flag", "device_unseen", "proxy"],
     "OUT_OF_REGION": ["region_novel_card_present", "concurrent_home_activity"],
+    "OUT_OF_REGION_USE": ["region_novel_card_present", "concurrent_home_activity"],
     "ACCOUNT_TAKEOVER": ["match_fail", "email_changed", "mixed_channel_new_device"],
     "SHARED_ENTITY_RING": ["ring_linked_high_risk", "ring_linked_prior_fraud", "device_other_susp_cards"],
 }
@@ -47,7 +50,7 @@ def discover(write_graph: bool = True, llm=None) -> dict:
     fr = df[df["outcome"] == "CONFIRMED_FRAUD"].copy()
     sig = pd.DataFrame({p: fr[s].mean(axis=1) for p, s in SIGNATURES.items()})
     fr["max_signature"] = sig.max(axis=1)
-    residual = fr[(fr["max_signature"] < 0.5) | (fr["pattern"].isin(["UNCLASSIFIED", "OTHER", "UNKNOWN"]))]
+    residual = fr[(fr["max_signature"] < 0.5) | (fr["pattern"].isin(["UNCLASSIFIED", "OTHER", "UNKNOWN", "UNDOCUMENTED"]))]
     if len(residual) < 5:
         res = {"hypotheses": [], "n_residual": int(len(residual))}
         OUT.write_text(json.dumps(res, indent=1))
