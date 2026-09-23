@@ -69,6 +69,7 @@ rules:
   - id: POL-3.5
     when: "pattern == 'OUT_OF_REGION' and concurrent_home_activity and phase == 'BEFORE_EVIDENCE'"
     recommend: [CONTACT_CUSTOMER]
+    defer: [BLOCK_CARD]          # block once the customer denies or does not reply
   - id: POL-3.6
     when: "pattern == 'ACCOUNT_TAKEOVER' and p_fraud >= 0.5"
     recommend: [STEP_UP_AUTH, ESCALATE_TO_ANALYST]
@@ -87,6 +88,18 @@ rules:
   - id: POL-1.4
     when: "decision == 'PROTECT' and not wider_compromise"
     recommend: [WARN_CUSTOMER]
+
+# The policy can override the loss-minimising decision once specific evidence is in (policy is authoritative).
+decision_overrides:
+  - id: POL-3.4
+    when: "CUSTOMER_VALIDATION == 'CONFIRMED' and p_fraud < 0.5 and not undocumented_pattern"
+    decision: RELEASE
+  - id: POL-3.4
+    when: "CUSTOMER_VALIDATION == 'DENIED'"
+    decision: PROTECT
+  - id: POL-3.3
+    when: "CUSTOMER_VALIDATION == 'NO_REPLY' and p_fraud >= 0.3"
+    decision: PROTECT
 
 forbid:
   - id: POL-3.8

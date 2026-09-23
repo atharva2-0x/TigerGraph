@@ -101,6 +101,12 @@ class PolicyEngine:
                 return rr["route"]
         return a["route"]
 
+    def decision_override(self, facts: dict) -> dict | None:
+        for o in self.p.get("decision_overrides", []):
+            if evaluate(o["when"], facts):
+                return o
+        return None
+
     def is_forbidden(self, code: str, facts: dict) -> dict | None:
         for f in self.p.get("forbid", []):
             if f["action"] == code and not evaluate(f["unless"], facts):

@@ -169,7 +169,6 @@ def case(case_id: str):
     inv = STATE["inv"].get(case_id)
     if inv is not None:
         s = dict(inv.s)
-        s["subgraph"] = next((e["data"] for e in s["events"] if e["type"] == "graph"), None)
         if s.get("nba_after_evidence"):
             s["answer"] = answer_writer.to_answer(inv.s)
         return json.loads(json.dumps(s, default=str))

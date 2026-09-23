@@ -62,6 +62,7 @@ def to_answer(s: dict, graph_check: dict | None = None) -> dict:
                 "graph_queries": [{"tool": c["tool"], "args": c["args"], "via": c["via"], "ms": round(c["ms"], 1), "ok": c["ok"]} for c in s["tool_calls"]],
                 "evidence_ledger": last["ledger"],
                 "belief_trajectory": s.get("trajectory", []),
+                "subgraph": s.get("subgraph"),
                 "findings": s["explanation"].get("evidence_for_fraud", []) + s["explanation"].get("evidence_against_fraud", []),
                 "llm_investigation": s.get("llm_investigation"),
                 "precedent_cases": s.get("precedents", []),

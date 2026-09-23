@@ -114,6 +114,12 @@ class NbaEngine:
                 reason = (f"Evidence {top.kind} is worth requesting: EVSI ${top.evsi:.2f} > 0 after its cost ${top.cost:.2f}; "
                           + "; ".join(f"{o['response']} (p={o['prob']:.2f}) -> P(fraud)={o['p_after']:.2f} -> {o['decision_after']}" for o in top.outcomes))
                 return Decision("GATHER", p, assessment.ci, float(agree), el, opts, top, reason)
+        facts_p = {**facts, "p_fraud": p}
+        ov = self.policy.decision_override(facts_p) if not allow_gather or used else None
+        if ov and ov["decision"] != best:
+            reason = (f"Policy {ov['id']} sets the decision to {ov['decision']} given the evidence received "
+                      f"(loss model alone preferred {best}: PROTECT ${el['PROTECT']:.2f} vs RELEASE ${el['RELEASE']:.2f}).")
+            return Decision(ov["decision"], p, assessment.ci, float(agree), el, opts, None, reason)
         reason = (f"Stop and act: best decision {best} (expected loss PROTECT ${el['PROTECT']:.2f} vs RELEASE ${el['RELEASE']:.2f}); "
                   f"decision stability {agree:.0%}; " + ("no evidence request has positive value of information." if not top else
                                                          f"top evidence {top.kind} would not change the decision."))

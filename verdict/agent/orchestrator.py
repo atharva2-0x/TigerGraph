@@ -16,6 +16,7 @@ from typing import Any, Callable
 
 from verdict.agent.graph_gateway import QUERIES, Gateway, make_gateway
 from verdict.agent.llm import LLM, STR, STRS, obj
+from verdict.config import settings
 from verdict.memory.case_store import CaseStore
 from verdict.ops_mcp import mock_bank
 from verdict.outputs import claim_checker
@@ -105,7 +106,8 @@ class Investigation:
         self._raw = collect_core(gw, txn, parallel=False)
         self.signals, self.facts = derive_signals(self._raw)
         self.facts["customer_claims"] = claims
-        self.emit("INVESTIGATING", "graph", "Subgraph around the trigger", self.subgraph())
+        self.s["subgraph"] = self.subgraph()
+        self.emit("INVESTIGATING", "graph", "Subgraph around the trigger", self.s["subgraph"])
 
         if self.sh.store:
             self.sh.store.open_case(self.case_id, self.source, self.t.get("trigger_type", ""), self.facts["ts"], self.facts)
@@ -362,8 +364,12 @@ class Investigation:
                   "wider window), inspect a precedent case (mem_case_record), check the customer's other cards, or look up policy "
                   "clauses. Use add_finding for each conclusion and propose_action for actions you believe are warranted. "
                   "Finish with a short paragraph: leading hypothesis, strongest alternative, and what evidence would discriminate them.")
-        res = self.sh.llm.tool_loop(prompt, self._llm_tools(), self._exec_tool, max_calls=8,
-                                    on_event=lambda k, d: self.emit("INVESTIGATING", k, d.get("text", "")[:300], d))
+        try:
+            res = self.sh.llm.tool_loop(prompt, self._llm_tools(), self._exec_tool, max_calls=settings.max_tool_calls,
+                                        on_event=lambda k, d: self.emit("INVESTIGATING", k, d.get("text", "")[:300], d))
+        except Exception as e:  # noqa: BLE001 - never let the LLM take the investigation down
+            self.emit("INVESTIGATING", "error", f"LLM investigation step failed, continuing deterministically: {type(e).__name__}", {"error": str(e)[:300]})
+            res = None
         if res:
             self.s["llm_investigation"] = res
 
