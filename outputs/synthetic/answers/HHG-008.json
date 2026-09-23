@@ -1,7 +1,7 @@
 {
   "case_id": "HHG-008",
   "schema_version": "verdict-answer/1.0",
-  "generated_at": "2026-09-23T09:58:11Z",
+  "generated_at": "2026-09-23T10:02:17Z",
   "agent": {
     "name": "VERDICT",
     "version": "0.1.0",
@@ -82,7 +82,7 @@
             "txn": "3061161"
           },
           "via": "mcp",
-          "ms": 14.4,
+          "ms": 18.1,
           "ok": true
         },
         {
@@ -93,7 +93,7 @@
             "window_min": 60
           },
           "via": "mcp",
-          "ms": 13.5,
+          "ms": 12.4,
           "ok": true
         },
         {
@@ -102,7 +102,7 @@
             "txn": "3061161"
           },
           "via": "mcp",
-          "ms": 12.0,
+          "ms": 16.2,
           "ok": true
         },
         {
@@ -111,7 +111,7 @@
             "txn": "3061161"
           },
           "via": "mcp",
-          "ms": 11.3,
+          "ms": 14.0,
           "ok": true
         },
         {
@@ -120,7 +120,7 @@
             "txn": "3061161"
           },
           "via": "mcp",
-          "ms": 10.8,
+          "ms": 14.4,
           "ok": true
         },
         {
@@ -129,7 +129,7 @@
             "txn": "3061161"
           },
           "via": "mcp",
-          "ms": 10.4,
+          "ms": 13.7,
           "ok": true
         },
         {
@@ -138,7 +138,7 @@
             "txn": "3061161"
           },
           "via": "mcp",
-          "ms": 16.3,
+          "ms": 20.5,
           "ok": true
         },
         {
@@ -147,7 +147,7 @@
             "txn": "3061161"
           },
           "via": "mcp",
-          "ms": 11.4,
+          "ms": 13.6,
           "ok": true
         },
         {
@@ -157,7 +157,7 @@
             "k": 8
           },
           "via": "mcp",
-          "ms": 26.0,
+          "ms": 32.6,
           "ok": true
         },
         {
@@ -166,7 +166,7 @@
             "card": "CARD-001458"
           },
           "via": "mcp",
-          "ms": 13.0,
+          "ms": 16.6,
           "ok": true
         },
         {
@@ -175,7 +175,7 @@
             "txn": "3061161"
           },
           "via": "mcp",
-          "ms": 10.9,
+          "ms": 12.4,
           "ok": true
         },
         {
@@ -314,7 +314,7 @@
             "k": 6
           },
           "via": "mcp",
-          "ms": 11.9,
+          "ms": 9.9,
           "ok": true
         },
         {
@@ -453,7 +453,7 @@
             "k": 8
           },
           "via": "mcp",
-          "ms": 10.4,
+          "ms": 10.3,
           "ok": true
         }
       ],
@@ -702,19 +702,19 @@
             "fraud": false
           },
           {
-            "id": "FP-fac21f30e3",
-            "label": "FP-fac21f30e3",
-            "type": "Card",
-            "linked": true,
-            "risk": 0.9865,
-            "fraud": false
-          },
-          {
             "id": "FP-a65ffe21dc",
             "label": "FP-a65ffe21dc",
             "type": "Card",
             "linked": true,
             "risk": 0.7699,
+            "fraud": false
+          },
+          {
+            "id": "FP-fac21f30e3",
+            "label": "FP-fac21f30e3",
+            "type": "Card",
+            "linked": true,
+            "risk": 0.9865,
             "fraud": false
           },
           {
@@ -731,15 +731,15 @@
             "precedent": true
           },
           {
-            "id": "CC-00459",
-            "label": "CC-00459",
+            "id": "CC-00457",
+            "label": "CC-00457",
             "type": "FraudCase",
             "outcome": "CONFIRMED_FRAUD",
             "precedent": true
           },
           {
-            "id": "CC-00144",
-            "label": "CC-00144",
+            "id": "CC-00341",
+            "label": "CC-00341",
             "type": "FraudCase",
             "outcome": "CONFIRMED_FRAUD",
             "precedent": true
@@ -799,12 +799,12 @@
             "type": "SHARES_ENTITY"
           },
           {
-            "source": "FP-fac21f30e3",
+            "source": "FP-a65ffe21dc",
             "target": "DEV-5bb03b1bae",
             "type": "SHARES_ENTITY"
           },
           {
-            "source": "FP-a65ffe21dc",
+            "source": "FP-fac21f30e3",
             "target": "DEV-5bb03b1bae",
             "type": "SHARES_ENTITY"
           },
@@ -819,12 +819,12 @@
             "type": "SIMILAR"
           },
           {
-            "source": "CC-00459",
+            "source": "CC-00457",
             "target": "3061161",
             "type": "SIMILAR"
           },
           {
-            "source": "CC-00144",
+            "source": "CC-00341",
             "target": "3061161",
             "type": "SIMILAR"
           },
@@ -881,48 +881,25 @@
           "summary": ""
         },
         {
-          "case_id": "CC-00446",
+          "case_id": "CC-00361",
           "outcome": "CONFIRMED_FRAUD",
           "pattern": "SHARED_ENTITY_RING",
           "actions_taken": "CREATE_CASE;BLOCK_CARD;FILE_REPORT",
           "evidence_requested": "CUSTOMER_VALIDATION",
           "evidence_result": "DENIED",
-          "summary": "Card CARD-000560 used from a device and recipient email shared with 5 other cards that also showed fraud within days. Linked activity suggests an organised ring.",
-          "cards": [
-            "CARD-000255",
-            "CARD-000560",
-            "CARD-001512",
-            "CARD-001111",
-            "CARD-000319",
-            "CARD-001259"
-          ],
-          "distance": 0.5090361,
-          "via": [
-            "vector",
-            "same-pattern"
-          ],
-          "fused_score": 0.0264
-        },
-        {
-          "case_id": "CC-00369",
-          "outcome": "CONFIRMED_FRAUD",
-          "pattern": "SHARED_ENTITY_RING",
-          "actions_taken": "CREATE_CASE;BLOCK_CARD;FILE_REPORT",
-          "evidence_requested": "CUSTOMER_VALIDATION",
-          "evidence_result": "DENIED",
-          "summary": "Card CARD-000731 used from a device and recipient email shared with 3 other cards that also showed fraud within days. Linked activity suggests an organised ring.",
+          "summary": "Card CARD-001266 used from a device and recipient email shared with 3 other cards that also showed fraud within days. Linked activity suggests an organised ring.",
           "cards": [
             "CARD-000003",
             "CARD-000167",
             "CARD-000731",
             "CARD-001266"
           ],
-          "distance": 0.5088664,
+          "distance": 0.5086834,
           "via": [
             "vector",
             "same-pattern"
           ],
-          "fused_score": 0.0261
+          "fused_score": 0.0264
         },
         {
           "case_id": "CC-00095",
@@ -944,7 +921,19 @@
             "vector",
             "same-pattern"
           ],
-          "fused_score": 0.0259
+          "fused_score": 0.0261
+        },
+        {
+          "case_id": "CC-00341",
+          "score": 0.2597303021722716,
+          "outcome": "CONFIRMED_FRAUD",
+          "pattern": "SHARED_ENTITY_RING",
+          "via": [
+            "graph-structure",
+            "same-pattern"
+          ],
+          "fused_score": 0.0261,
+          "summary": ""
         },
         {
           "case_id": "CC-00057",
@@ -965,186 +954,186 @@
             "vector",
             "same-pattern"
           ],
-          "fused_score": 0.0256
+          "fused_score": 0.0259
         }
       ],
       "timeline": [
         {
-          "ts": "2026-09-23 09:58:10",
+          "ts": "2026-09-23 10:02:16",
           "phase": "TRIGGERED",
           "type": "status",
           "title": "Triggered"
         },
         {
-          "ts": "2026-09-23 09:58:10",
+          "ts": "2026-09-23 10:02:16",
           "phase": "TRIGGERED",
           "type": "trigger",
           "title": "RISK_SIGNAL: Model alert: risk score 0.54 on transaction 3061161."
         },
         {
-          "ts": "2026-09-23 09:58:10",
+          "ts": "2026-09-23 10:02:16",
           "phase": "INVESTIGATING",
           "type": "status",
           "title": "Investigating"
         },
         {
-          "ts": "2026-09-23 09:58:10",
+          "ts": "2026-09-23 10:02:16",
           "phase": "INVESTIGATING",
           "type": "tool_call",
           "title": "MCP inv_txn_context"
         },
         {
-          "ts": "2026-09-23 09:58:10",
+          "ts": "2026-09-23 10:02:16",
           "phase": "INVESTIGATING",
           "type": "tool_call",
           "title": "MCP inv_card_velocity"
         },
         {
-          "ts": "2026-09-23 09:58:10",
+          "ts": "2026-09-23 10:02:16",
           "phase": "INVESTIGATING",
           "type": "tool_call",
           "title": "MCP inv_customer_baseline"
         },
         {
-          "ts": "2026-09-23 09:58:10",
+          "ts": "2026-09-23 10:02:16",
           "phase": "INVESTIGATING",
           "type": "tool_call",
           "title": "MCP inv_device_profile"
         },
         {
-          "ts": "2026-09-23 09:58:10",
+          "ts": "2026-09-23 10:02:16",
           "phase": "INVESTIGATING",
           "type": "tool_call",
           "title": "MCP inv_region_profile"
         },
         {
-          "ts": "2026-09-23 09:58:10",
+          "ts": "2026-09-23 10:02:16",
           "phase": "INVESTIGATING",
           "type": "tool_call",
           "title": "MCP inv_identity_consistency"
         },
         {
-          "ts": "2026-09-23 09:58:10",
+          "ts": "2026-09-23 10:02:16",
           "phase": "INVESTIGATING",
           "type": "tool_call",
           "title": "MCP inv_linked_entities"
         },
         {
-          "ts": "2026-09-23 09:58:10",
+          "ts": "2026-09-23 10:02:16",
           "phase": "INVESTIGATING",
           "type": "tool_call",
           "title": "MCP inv_prior_cases"
         },
         {
-          "ts": "2026-09-23 09:58:10",
+          "ts": "2026-09-23 10:02:16",
           "phase": "INVESTIGATING",
           "type": "tool_call",
           "title": "MCP inv_similar_cases"
         },
         {
-          "ts": "2026-09-23 09:58:10",
+          "ts": "2026-09-23 10:02:16",
           "phase": "INVESTIGATING",
           "type": "tool_call",
           "title": "MCP inv_community"
         },
         {
-          "ts": "2026-09-23 09:58:10",
+          "ts": "2026-09-23 10:02:16",
           "phase": "INVESTIGATING",
           "type": "tool_call",
           "title": "MCP inv_exposure"
         },
         {
-          "ts": "2026-09-23 09:58:10",
+          "ts": "2026-09-23 10:02:16",
           "phase": "INVESTIGATING",
           "type": "graph",
           "title": "Subgraph around the trigger"
         },
         {
-          "ts": "2026-09-23 09:58:11",
+          "ts": "2026-09-23 10:02:17",
           "phase": "OPENED",
           "type": "case",
           "title": "Case HHG-008 opened and linked in the graph"
         },
         {
-          "ts": "2026-09-23 09:58:11",
+          "ts": "2026-09-23 10:02:17",
           "phase": "INVESTIGATING",
           "type": "tool_call",
           "title": "MCP rag_search_docs"
         },
         {
-          "ts": "2026-09-23 09:58:11",
+          "ts": "2026-09-23 10:02:17",
           "phase": "INVESTIGATING",
           "type": "tool_call",
           "title": "MCP rag_search_cases"
         },
         {
-          "ts": "2026-09-23 09:58:11",
+          "ts": "2026-09-23 10:02:17",
           "phase": "INVESTIGATING",
           "type": "rag",
           "title": "GraphRAG: 6 policy clauses, 6 precedent cases"
         },
         {
-          "ts": "2026-09-23 09:58:11",
+          "ts": "2026-09-23 10:02:17",
           "phase": "INVESTIGATING",
           "type": "llm_note",
           "title": "Offline mode: deterministic investigation plan (core GSQL toolbox) completed"
         },
         {
-          "ts": "2026-09-23 09:58:11",
+          "ts": "2026-09-23 10:02:17",
           "phase": "ASSESSED",
           "type": "status",
           "title": "Assessed"
         },
         {
-          "ts": "2026-09-23 09:58:11",
+          "ts": "2026-09-23 10:02:17",
           "phase": "BEFORE_EVIDENCE",
           "type": "assessment",
           "title": "P(fraud) = 1.00 (80% CI 1.00-1.00); pattern SHARED_ENTITY_RING"
         },
         {
-          "ts": "2026-09-23 09:58:11",
+          "ts": "2026-09-23 10:02:17",
           "phase": "BEFORE_EVIDENCE",
           "type": "nba",
           "title": "Before Evidence: PROTECT -> WARN_CUSTOMER[AUTO], CREATE_CASE[AUTO], DECLINE_TRANSACTION[L1_ANALYST], BLOCK_CARD[L1_ANALYST], FILE_REPORT[COMPLIANCE]"
         },
         {
-          "ts": "2026-09-23 09:58:11",
+          "ts": "2026-09-23 10:02:17",
           "phase": "AFTER_EVIDENCE",
           "type": "assessment",
           "title": "P(fraud) = 1.00 (80% CI 1.00-1.00); pattern SHARED_ENTITY_RING"
         },
         {
-          "ts": "2026-09-23 09:58:11",
+          "ts": "2026-09-23 10:02:17",
           "phase": "AFTER_EVIDENCE",
           "type": "nba",
           "title": "After Evidence: PROTECT -> WARN_CUSTOMER[AUTO], CREATE_CASE[AUTO], BLOCK_CARD[L1_ANALYST], FILE_REPORT[COMPLIANCE]"
         },
         {
-          "ts": "2026-09-23 09:58:11",
+          "ts": "2026-09-23 10:02:17",
           "phase": "EXPLAINED",
           "type": "status",
           "title": "Explained"
         },
         {
-          "ts": "2026-09-23 09:58:11",
+          "ts": "2026-09-23 10:02:17",
           "phase": "EXPLAINED",
           "type": "sar",
           "title": "Suspicious activity report drafted"
         },
         {
-          "ts": "2026-09-23 09:58:11",
+          "ts": "2026-09-23 10:02:17",
           "phase": "REMEMBERED",
           "type": "status",
           "title": "Remembered"
         },
         {
-          "ts": "2026-09-23 09:58:11",
+          "ts": "2026-09-23 10:02:17",
           "phase": "REMEMBERED",
           "type": "memory",
           "title": "Case, evidence, actions and similar-case links written to TigerGraph"
         },
         {
-          "ts": "2026-09-23 09:58:11",
+          "ts": "2026-09-23 10:02:17",
           "phase": "PENDING_APPROVAL",
           "type": "status",
           "title": "Awaiting human approval"
@@ -1165,7 +1154,7 @@
     ],
     "actions_log": [
       {
-        "ts": "2026-09-23 09:58:11",
+        "ts": "2026-09-23 10:02:17",
         "what": "CREATE_CASE",
         "route": "AUTO",
         "status": "EXECUTED",
@@ -1173,13 +1162,13 @@
           "action": "CREATE_CASE",
           "system": "case-management",
           "status": "EXECUTED",
-          "reference": "MOCK-36AC8681C9",
-          "executed_at": "2026-09-23 09:58:11",
+          "reference": "MOCK-761C270AFD",
+          "executed_at": "2026-09-23 10:02:17",
           "detail": {}
         }
       },
       {
-        "ts": "2026-09-23 09:58:11",
+        "ts": "2026-09-23 10:02:17",
         "what": "WARN_CUSTOMER",
         "route": "AUTO",
         "status": "EXECUTED",
@@ -1187,13 +1176,13 @@
           "action": "WARN_CUSTOMER",
           "system": "customer-messaging",
           "status": "EXECUTED",
-          "reference": "MOCK-9350E80964",
-          "executed_at": "2026-09-23 09:58:11",
+          "reference": "MOCK-3D96FBB03F",
+          "executed_at": "2026-09-23 10:02:17",
           "detail": {}
         }
       },
       {
-        "ts": "2026-09-23 09:58:11",
+        "ts": "2026-09-23 10:02:17",
         "what": "CREATE_CASE",
         "route": "AUTO",
         "status": "EXECUTED",
@@ -1201,19 +1190,19 @@
           "action": "CREATE_CASE",
           "system": "case-management",
           "status": "EXECUTED",
-          "reference": "MOCK-A8533100A7",
-          "executed_at": "2026-09-23 09:58:11",
+          "reference": "MOCK-FB730573BF",
+          "executed_at": "2026-09-23 10:02:17",
           "detail": {}
         }
       },
       {
-        "ts": "2026-09-23 09:58:11",
+        "ts": "2026-09-23 10:02:17",
         "what": "BLOCK_CARD",
         "route": "L1_ANALYST",
         "status": "PENDING_APPROVAL"
       },
       {
-        "ts": "2026-09-23 09:58:11",
+        "ts": "2026-09-23 10:02:17",
         "what": "FILE_REPORT",
         "route": "COMPLIANCE",
         "status": "PENDING_APPROVAL"
@@ -1472,8 +1461,8 @@
         "CARD-000941",
         "CARD-001536",
         "FP-7d4bed5e2c",
-        "FP-fac21f30e3",
-        "FP-a65ffe21dc"
+        "FP-a65ffe21dc",
+        "FP-fac21f30e3"
       ]
     },
     "activity": {
@@ -1487,7 +1476,7 @@
       "pattern": "SHARED_ENTITY_RING"
     },
     "narrative": {
-      "who": "Cardholder customer CUST-101116 (card CARD-001458); unknown actor(s) using the card; linked cards CARD-000941, CARD-001536, FP-7d4bed5e2c, FP-fac21f30e3, FP-a65ffe21dc.",
+      "who": "Cardholder customer CUST-101116 (card CARD-001458); unknown actor(s) using the card; linked cards CARD-000941, CARD-001536, FP-7d4bed5e2c, FP-a65ffe21dc, FP-fac21f30e3.",
       "what": "Suspected SHARED_ENTITY_RING fraud; P(fraud) 1.00.",
       "when": "Trigger transaction at 2026-05-26 11:39:46.",
       "where": "Channel ONLINE, billing region 186|87.",
@@ -1502,7 +1491,7 @@
     ],
     "tipping_off_note": "Customer communications must not disclose the SAR (REG-4).",
     "generated_by": "template",
-    "narrative_text": "Cardholder customer CUST-101116 (card CARD-001458); unknown actor(s) using the card; linked cards CARD-000941, CARD-001536, FP-7d4bed5e2c, FP-fac21f30e3, FP-a65ffe21dc. Suspected SHARED_ENTITY_RING fraud; P(fraud) 1.00. Trigger transaction at 2026-05-26 11:39:46. Channel ONLINE, billing region 186|87. connection through an anonymous proxy; purchaser email domain never used by the customer before; device never used by this customer before; the card's WCC component contains cards with confirmed fraud (component of 12 cards, 7 with fraud) Evidence gathered from the transaction graph (13 queries) and no customer contact."
+    "narrative_text": "Cardholder customer CUST-101116 (card CARD-001458); unknown actor(s) using the card; linked cards CARD-000941, CARD-001536, FP-7d4bed5e2c, FP-a65ffe21dc, FP-fac21f30e3. Suspected SHARED_ENTITY_RING fraud; P(fraud) 1.00. Trigger transaction at 2026-05-26 11:39:46. Channel ONLINE, billing region 186|87. connection through an anonymous proxy; purchaser email domain never used by the customer before; device never used by this customer before; the card's WCC component contains cards with confirmed fraud (component of 12 cards, 7 with fraud) Evidence gathered from the transaction graph (13 queries) and no customer contact."
   },
   "graph_write_back": {
     "vertex": "FraudCase/HHG-008",
@@ -1512,7 +1501,7 @@
     "action_vertices": 9,
     "linked_transactions": 1,
     "linked_cards": 6,
-    "similar_case_edges": 7,
+    "similar_case_edges": 9,
     "verified": true
   }
 }

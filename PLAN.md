@@ -8,6 +8,34 @@
 
 This document is the build plan and also a handoff spec: a fresh engineer or session should be able to build the whole MVP from it alone.
 
+## ✅ Build status (updated Wed Sep 23, ~16:30 IST)
+
+**Built and tested end to end in the cloud sandbox** (TigerGraph CE 4.2.5 in Docker, synthetic HHGOA-shaped data, LLM offline):
+
+| Area | Status |
+|---|---|
+| Synthetic stand-in dataset (5 documented patterns + 1 hidden pattern + false positives) | ✅ `verdict synth` |
+| Schema, loading jobs, loader (REST, works for Savanna), installer | ✅ |
+| 14 GSQL queries + GDS WCC/Louvain on a card projection | ✅ 10-25 ms per query |
+| MCP gateway (tigergraph-mcp, read-only filter + allow-list) | ✅ default path |
+| Calibrated evidence model + bootstrap CI + pattern classifier + time-split backtest | ✅ AUC 0.956 vs 0.555 for the risk score (synthetic) |
+| Policy engine (policy.yaml), VOI next-best-action, decision overrides, counterfactual branches | ✅ 17 unit tests |
+| GraphRAG (TigerVector policy clauses + case narratives, fused with structural precedent) | ✅ |
+| Undocumented-pattern discovery, learning loop, case memory write-back | ✅ |
+| Orchestrator + answer files + claim-checked SAR | ✅ 20/20 decisions, 19/20 patterns on the synthetic pack |
+| FastAPI + SSE, React analyst UI (queue, investigation room, memory, scoreboard, policy) | ✅ screenshots in docs/ |
+| verdict-ops MCP server (policy-gated actions) | ✅ |
+| Claude integration (tool loop, structured outputs, fallback) | ✅ coded; **untested live** (no API key yet); degrades to templates on any error |
+| Docker compose, README, blog draft, demo script, social post | ✅ drafts |
+
+**Deviations from the plan:** the official dataset could not be downloaded from the sandbox (Google Drive is blocked), so
+everything was built against a synthetic dataset of the same shape, with all dataset specifics isolated in
+`verdict/data/schema_map.yaml` and `verdict/policy/policy.yaml`. The orchestrator is a custom state machine (no LangGraph).
+Embeddings default to offline LSA because Hugging Face is blocked here; `VERDICT_EMBEDDER=fastembed` is available.
+
+**Remaining (needs the official data and the API key):** map real columns and policy identifiers, run `verdict bootstrap`
++ `verdict benchmark` on HHGOA_IEEE, adapt the answer JSON to the README's format, and record the demo.
+
 ---
 
 ## 0. TL;DR
