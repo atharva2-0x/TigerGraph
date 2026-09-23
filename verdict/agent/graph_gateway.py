@@ -193,8 +193,7 @@ class McpGateway(Gateway):
         fut: Future = asyncio.run_coroutine_threadsafe(_c(), self._loop)
         res = fut.result(timeout=120)
         text = "".join(getattr(c, "text", "") for c in res.content)
-        body = text[text.find("{"): text.rfind("}") + 1] if "{" in text else "{}"
-        data = json.loads(body)
+        data, _ = json.JSONDecoder().raw_decode(text[text.find("{"):]) if "{" in text else ({}, 0)
         if not data.get("success", False):
             raise RuntimeError(data.get("error") or text[:300])
         return data

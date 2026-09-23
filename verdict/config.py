@@ -30,11 +30,13 @@ class Settings:
     tg_investigator_password: str = field(default_factory=lambda: _env("TG_INVESTIGATOR_PASSWORD", ""))
 
     # Data
-    data_dir: Path = field(default_factory=lambda: Path(_env("VERDICT_DATA_DIR", str(ROOT / "data" / "hhgoa"))))
+    # real dataset goes in data/hhgoa; until it exists we fall back to the synthetic stand-in
+    data_dir: Path = field(default_factory=lambda: Path(_env("VERDICT_DATA_DIR", str(ROOT / "data" / "hhgoa")
+                                                             if (ROOT / "data" / "hhgoa").exists() else str(ROOT / "data" / "synthetic"))))
     work_dir: Path = field(default_factory=lambda: Path(_env("VERDICT_WORK_DIR", str(ROOT / "artifacts"))))
     schema_map: Path = field(default_factory=lambda: Path(_env("VERDICT_SCHEMA_MAP", str(ROOT / "verdict" / "data" / "schema_map.yaml"))))
     policy_file: Path = field(default_factory=lambda: Path(_env("VERDICT_POLICY", str(ROOT / "verdict" / "policy" / "policy.yaml"))))
-    answers_dir: Path = field(default_factory=lambda: Path(_env("VERDICT_ANSWERS_DIR", str(ROOT / "outputs" / "answers"))))
+    answers_dir: Path = field(default_factory=lambda: Path(_env("VERDICT_ANSWERS_DIR", "")) if _env("VERDICT_ANSWERS_DIR") else None)
 
     # LLM
     llm_mode: str = field(default_factory=lambda: _env("VERDICT_LLM", "auto"))  # auto | anthropic | offline
@@ -49,6 +51,11 @@ class Settings:
     # Embeddings: "lsa" (offline TF-IDF+SVD, default) or "fastembed"
     embedder: str = field(default_factory=lambda: _env("VERDICT_EMBEDDER", "lsa"))
     emb_dim: int = field(default_factory=lambda: int(_env("VERDICT_EMB_DIM", "128")))
+
+    def __post_init__(self):
+        if self.answers_dir is None:  # synthetic runs never overwrite the submission answers
+            sub = "synthetic" if self.data_dir.name == "synthetic" else "hhgoa"
+            object.__setattr__(self, "answers_dir", ROOT / "outputs" / sub / "answers")
 
     @property
     def use_llm(self) -> bool:

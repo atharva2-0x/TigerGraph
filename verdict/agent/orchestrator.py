@@ -112,6 +112,7 @@ class Investigation:
             self.audit("CREATE_CASE", route="AUTO", status="EXECUTED", receipt=mock_bank.execute("CREATE_CASE", self.case_id))
             self.emit("OPENED", "case", f"Case {self.case_id} opened and linked in the graph")
 
+        self._graphrag()
         self._llm_investigate()
         self.s["tool_calls"] = [c.__dict__ for c in gw.calls[start_calls:]]
 
@@ -282,6 +283,22 @@ class Investigation:
             edges.append((sc["case_id"], tx.get("txn_id"), "SIMILAR"))
         return {"nodes": nodes, "edges": [{"source": a, "target": b, "type": t} for a, b, t in edges if a and b]}
 
+    def _graphrag(self) -> None:
+        """GraphRAG context: policy clauses + precedent cases (vector search fused with graph-structural precedent)."""
+        a = self.sh.model.assess(self.signals)
+        top = a.patterns[0][0] if a.patterns else None
+        on = [SIGNALS[k][1] for k, v in self.signals.items() if v and k in SIGNALS][:8]
+        query = f"{self.t.get('detail', '')} {top or ''} " + "; ".join(on)
+        try:
+            pack = self.sh.retriever.context_pack(query, self.facts, top, exclude_case=self.case_id)
+        except Exception as e:  # noqa: BLE001
+            pack = {"policy": [], "precedents": [], "error": str(e)[:200]}
+        self.s["context_pack"] = {"query": query[:500], "policy": [{k: d.get(k) for k in ("chunk_id", "ref_id", "text", "distance")} for d in pack["policy"]],
+                                  "precedents": pack["precedents"]}
+        self.s["precedents"] = pack["precedents"]
+        self.emit("INVESTIGATING", "rag", f"GraphRAG: {len(pack['policy'])} policy clauses, {len(pack['precedents'])} precedent cases",
+                  self.s["context_pack"])
+
     # -------------------------------------------------------------- LLM phase
     def _llm_tools(self) -> list[dict]:
         tools = []
@@ -382,6 +399,13 @@ class Investigation:
             wider_compromise=bool(self.signals.get("other_cards_suspicious")),
             proxy=bool(self.signals.get("proxy")), concurrent_home_activity=bool(self.signals.get("concurrent_home_activity")),
             phase=phase, **{k: v for k, v in self.s["responses"].items()})
+        if phase == "BEFORE_EVIDENCE" and "trajectory" not in self.s:
+            self.s["trajectory"] = self._trajectory()
+        elif phase == "AFTER_EVIDENCE" and self.s["responses"] and not quiet:
+            label = ", ".join(f"{k.replace('_', ' ').lower()}: {v}" for k, v in self.s["responses"].items())
+            if not any(t["step"] == label for t in self.s.get("trajectory", [])):
+                self.s.setdefault("trajectory", []).append({"step": label, "p": round(a.p, 4), "ci": [round(a.ci[0], 4), round(a.ci[1], 4)],
+                                                             "added": list(self.s["responses"])})
         rec = {"phase": phase, **a.to_dict(), "pattern": top, "pattern_display": self.facts["pattern_display"], "pattern_prob": round(prob, 3),
                "signature_match": {k: round(v, 2) for k, v in sig.items()}, "undocumented_pattern": undocumented,
                "hypothesis": disc}
@@ -391,6 +415,22 @@ class Investigation:
                       {"p": a.p, "ci": a.ci, "pattern": self.facts["pattern_display"], "ledger": [r.to_dict() for r in a.rows]})
         self._last_assessment = a
         return a
+
+    def _trajectory(self) -> list[dict]:
+        """How belief evolved as each graph query added its evidence (cumulative, in investigation order)."""
+        from verdict.scoring.features import CORE_QUERIES
+
+        cur = {"risk_score": self.signals.get("risk_score", 0)}
+        a = self.sh.model.assess(cur)
+        out = [{"step": "risk score only", "p": round(a.p, 4), "ci": [round(a.ci[0], 4), round(a.ci[1], 4)], "added": []}]
+        for q in CORE_QUERIES:
+            added = [k for k, (src, _) in SIGNALS.items() if src == q and self.signals.get(k)]
+            if not added:
+                continue
+            cur.update({k: self.signals[k] for k in added})
+            a = self.sh.model.assess(cur)
+            out.append({"step": q.replace("inv_", ""), "p": round(a.p, 4), "ci": [round(a.ci[0], 4), round(a.ci[1], 4)], "added": added})
+        return out
 
     def _nba(self, a, d, phase: str) -> dict:
         self.facts["decision"] = d.decision
@@ -471,7 +511,8 @@ class Investigation:
         lines = [
             f"{self.t.get('trigger_type', 'Trigger')} on transaction {f['txn_id']} (${f['amount']:.2f}, {f.get('channel')}) "
             f"on card {f['card_id']} of customer {f['customer_id']} at {f['ts']}.",
-            f"The agent ran {len(s['tool_calls'])} graph queries through the TigerGraph MCP server"
+            f"The agent ran {len(s['tool_calls'])} graph queries "
+            f"{'through the TigerGraph MCP server' if (s['tool_calls'] and s['tool_calls'][0]['via'] == 'mcp') else 'against TigerGraph'}"
             f" and assessed P(fraud) = {before['p_fraud']:.2f} (80% CI {before['ci80'][0]:.2f}-{before['ci80'][1]:.2f})"
             f" before additional evidence, most consistent with {before['pattern']}.",
         ]
