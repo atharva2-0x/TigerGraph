@@ -7,3 +7,5 @@ __pycache__/
 node_modules/
 ui/dist/
 artifacts/
+docker/*.so
+*.egg-info/
