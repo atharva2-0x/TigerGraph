@@ -1,0 +1,17 @@
+Welcome to VERDICT, an agentic fraud investigation prototype built with TigerGraph for Hacker House Goa 2026.
+
+The Vercel page is an interactive replay of precomputed HHGOA-format sample investigations. It does not connect to a live TigerGraph agent. The repository's Docker quickstart runs the live TigerGraph and MCP workflow.
+
+In the case queue, open HHG zero zero eight. The timeline follows a model risk alert through graph investigation, assessment, explanation, and case memory. The agent checks transaction context, card velocity, customer and device history, identity consistency, linked entities, prior cases, community membership, and exposure. In this replay, the connected evidence includes an anonymous proxy, an unfamiliar purchaser email domain, a new device, and a twelve-card component with seven cards linked to confirmed fraud.
+
+The evidence ledger shows how each finding moves the fraud assessment. The replay estimates ninety-nine point nine percent fraud probability, with an eighty percent interval from ninety-nine point eight to ninety-nine point nine percent, and identifies a shared-entity ring.
+
+Next, the value-of-information calculation explains why this case stops and acts. The best decision is Protect: its expected loss is seventeen cents, compared with more than eleven hundred ninety-three dollars for Release. Decision stability is one hundred percent, and no evidence request has positive value in this example.
+
+Policy determines who can do what. The system can create the case and warn the customer automatically. Blocking the card waits for an L one analyst, and the suspicious activity report goes to Compliance. The agent recommends these actions; approval routes control their execution. The report is grounded in stored evidence, and the customer must not be told that a report was filed.
+
+Finally, the case, evidence, actions, and similar-case links are written back to TigerGraph. The replay marks that writeback as verified.
+
+On the official HHGOA data, a time-ordered historical holdout reached zero point nine eight eight six ROC AUC and a zero point zero two six five Brier score. The twenty-case pack produced twenty verified graph writebacks and thirteen SAR recommendations. These are historical and workflow results, not accuracy on the hidden judging answers. No additional evidence request was selected in that pack.
+
+I work as a Forward Deployed Engineer at Fiserv, connecting fintech systems and agentic AI. That perspective shaped VERDICT's focus on integrations, evidence trails, policy, and human approval alongside the graph and model.
