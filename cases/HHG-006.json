@@ -1,0 +1,209 @@
+{
+  "case_id": "HHG-006",
+  "case": {
+    "status": "open",
+    "verdict": "fraud",
+    "fraud_probability": 0.9924,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3476602",
+      "3476633",
+      "3476665",
+      "3476682"
+    ],
+    "first_suspicious_txn_id": "3476602",
+    "connected_card_ids": [],
+    "connected_device_profiles": [
+      "Trident/7.0 (profile DEV-00346c61fa)"
+    ],
+    "exposure_usd": 1906.07,
+    "evidence": [
+      {
+        "claim": "Bank model risk score 0.25",
+        "source": "graph",
+        "ref": "transaction.risk_score",
+        "entity_ids": [
+          "3476682",
+          "C07297-K1",
+          "C07297"
+        ],
+        "log_odds_contribution": 2.77,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "online purchase by a customer who rarely shops online",
+        "source": "customer",
+        "ref": "inv_customer_baseline",
+        "entity_ids": [
+          "3476682",
+          "C07297-K1",
+          "C07297"
+        ],
+        "log_odds_contribution": -0.393,
+        "effect": "weighs_against_fraud"
+      },
+      {
+        "claim": "identity record marks the device as new for this account",
+        "source": "graph",
+        "ref": "inv_device_profile",
+        "entity_ids": [
+          "3476682",
+          "C07297-K1",
+          "C07297"
+        ],
+        "log_odds_contribution": -3.873,
+        "effect": "weighs_against_fraud"
+      },
+      {
+        "claim": "device previously used by 2+ other customers",
+        "source": "graph",
+        "ref": "inv_device_profile",
+        "entity_ids": [
+          "3476682",
+          "C07297-K1",
+          "C07297"
+        ],
+        "log_odds_contribution": 0.186,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "device linked to a previously confirmed fraud case",
+        "source": "graph",
+        "ref": "inv_device_profile",
+        "entity_ids": [
+          "3476682",
+          "C07297-K1",
+          "C07297"
+        ],
+        "log_odds_contribution": 1.181,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "other cards used this device with suspicious activity in the same week",
+        "source": "graph",
+        "ref": "inv_device_profile",
+        "entity_ids": [
+          "3476682",
+          "C07297-K1",
+          "C07297"
+        ],
+        "log_odds_contribution": -0.672,
+        "effect": "weighs_against_fraud"
+      },
+      {
+        "claim": "online and in-store activity with new devices inside 48h",
+        "source": "graph",
+        "ref": "inv_identity_consistency",
+        "entity_ids": [
+          "3476682",
+          "C07297-K1",
+          "C07297"
+        ],
+        "log_odds_contribution": 0.16,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "most structurally similar past cases were cleared (fraud share 0.4)",
+        "source": "graph",
+        "ref": "inv_similar_cases",
+        "entity_ids": [
+          "3476682",
+          "C07297-K1",
+          "C07297",
+          "CC-0781"
+        ],
+        "log_odds_contribution": -1.017,
+        "effect": "weighs_against_fraud"
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-0781"
+    ],
+    "summary": "Customer C07297 message: 'I never made this $482.12 purchase. Please check my card.' Refers to 3476682. Graph evidence supporting fraud included Bank model risk score 0.25; device previously used by 2+ other customers. Counter-evidence included online purchase by a customer who rarely shops online; identity record marks the device as new for this account. The calibrated fraud probability is 0.99 (80% interval 0.98\u20131.00); the conclusion is fraud and the best action is PROTECT. Stop and act: best decision PROTECT (expected loss PROTECT $0.98 vs RELEASE $2837.50); decision stability 100%; no evidence request has positive value of information.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-006"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "CREATE_CASE per R2; decision PROTECT at P(fraud)=0.99 (stability 100%)."
+      },
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "BLOCK_CARD per R2; decision PROTECT at P(fraud)=0.99 (stability 100%)."
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "FILE_REPORT per R2; decision PROTECT at P(fraud)=0.99 (stability 100%)."
+      }
+    ],
+    "final": [
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "CREATE_CASE per R2; decision PROTECT at P(fraud)=0.99 (stability 100%)."
+      },
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "BLOCK_CARD per R2; decision PROTECT at P(fraud)=0.99 (stability 100%)."
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "FILE_REPORT per R2; decision PROTECT at P(fraud)=0.99 (stability 100%)."
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": true,
+    "reason": "Filed under R2: strong suspicion plus exposure exceeds $1,000. The filing remains subject to L2 approval.",
+    "narrative": "This report concerns customer C07297 and card C07297-K1. At 2016-11-21 20:30:00, transaction 3476682 for $482.12 was identified. Channel online, billing region 264|87. The activity was assessed as CARD_NOT_PRESENT_NEW_DEVICE, with calibrated P(fraud) 0.99 and an 80% interval of 0.98\u20131.00. Supporting evidence included Bank model risk score 0.25; device previously used by 2+ other customers. Evidence weighing against fraud included online purchase by a customer who rarely shops online; identity record marks the device as new for this account. No additional card was included as a connected subject in this report. The policy recommends CREATE_CASE, BLOCK_CARD, FILE_REPORT; FILE_REPORT requires L2 approval under R2.",
+    "subjects": [
+      "C07297",
+      "C07297-K1",
+      "DEV-00346c61fa"
+    ],
+    "total_amount_usd": 1906.07,
+    "activity_dates": [
+      "2016-11-21",
+      "2016-11-21"
+    ]
+  },
+  "stop_reason": "Stop and act: best decision PROTECT (expected loss PROTECT $0.98 vs RELEASE $2837.50); decision stability 100%; no evidence request has positive value of information.",
+  "tool_calls": 13,
+  "tokens": 0,
+  "latency_s": 0.73,
+  "agent": {
+    "name": "VERDICT",
+    "version": "0.1.0",
+    "llm": {
+      "enabled": false,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "calls": 0
+      }
+    },
+    "graph_access": "mcp"
+  },
+  "graph_write_back": {
+    "vertex": "FraudCase/HHG-006",
+    "status": "PENDING_APPROVAL",
+    "evidence_vertices": 9,
+    "evidence_requests": 0,
+    "action_vertices": 6,
+    "linked_transactions": 1,
+    "linked_cards": 1,
+    "similar_case_edges": 16,
+    "verified": true
+  }
+}

@@ -70,17 +70,20 @@ The maths (ledger, value of information) and the rules (policy) are deterministi
 
 ## Results
 
-Everything below is measured on the **synthetic stand-in dataset** ([`verdict synth`](verdict/data/synth.py)), which has the same shape as HHGOA_IEEE. Re-run `verdict bootstrap` on the official data to refresh it.
+The current run uses the official HHGOA_IEEE dataset in `data/hhgoa/` (the raw dataset is intentionally git-ignored). The 5,565 closed cases provide 4,665 confirmed-fraud and 900 cleared examples for calibration. On a time-ordered holdout of 1,392 historical cases, the calibrated evidence model reached **0.9886 ROC AUC** and **0.0265 Brier score**; the pattern classifier reached **73.94% accuracy** on 1,247 held-out confirmed-fraud cases. These are historical backtest metrics, not scores on the hidden 20-case answer key.
 
 | Metric | Value |
 |---|---|
-| Time-split backtest AUC (evidence model), held-out last 25% of closed cases | **0.956** |
-| AUC of the bank's risk score alone, same cases | 0.555 |
-| Brier score | 0.078 |
-| Pattern accuracy on held-out fraud cases | 100% (100 cases) |
-| 20-case pack: final decision correct | **20 / 20** |
-| 20-case pack: pattern correct (incl. undocumented) | 19 / 20 |
-| Cases where the agent requested evidence | 11 / 20 |
+| Time-split historical backtest: evidence-model ROC AUC | **0.9886** |
+| Time-split historical backtest: Brier score | **0.0265** |
+| Held-out fraud-pattern accuracy | **73.94%** (1,247 cases) |
+| HHGOA judging pack: answer files generated | **20 / 20** |
+| HHGOA judging pack: graph writebacks verified | **20 / 20** |
+| HHGOA judging pack: average graph/retrieval calls | **13 per case** |
+| HHGOA judging pack: SARs recommended | **13 / 20** |
+| HHGOA judging pack: additional evidence requests | **0 / 20** |
+
+For this judging pack, the VOI calculation found no evidence request with positive expected value, so the agent stopped and recorded its rationale rather than requesting simulated evidence. All 20 cases remain in the approval workflow. The benchmark run used the deterministic path (`USE_LLM=false`); LLM-assisted tool selection and explanations are optional and fall back to grounded templates.
 
 ## Quickstart
 
@@ -109,10 +112,10 @@ verdict benchmark
 Savanna works too: set `TG_HOST` and the credentials (or `TG_API_TOKEN`) in `.env` and run the same commands. Use TigerGraph 4.2+ for vector support.
 
 ### Using the official HHGOA_IEEE dataset
-1. Put the files in `data/hhgoa/`. It's git-ignored; never commit the dataset.
-2. Check the column names in [`verdict/data/schema_map.yaml`](verdict/data/schema_map.yaml) against the dataset README.
-3. Transcribe the bank's action identifiers, approval routes, rules and SAR criteria into [`verdict/policy/policy.yaml`](verdict/policy/policy.yaml).
-4. `verdict bootstrap`, then `verdict benchmark` → `outputs/hhgoa/answers/`.
+1. Put the four source files (`transactions.csv`, `identity.csv`, `closed_cases_history.csv`, and `case_pack.csv`) in `data/hhgoa/`. The folder is git-ignored; never commit the raw dataset.
+2. The HHGOA column mapping is in [`verdict/data/schema_map.yaml`](verdict/data/schema_map.yaml), and the challenge action identifiers, approval routes, and SAR rules are in [`verdict/policy/hhgoa.yaml`](verdict/policy/hhgoa.yaml).
+3. Run `verdict bootstrap --init` to prepare and load the dataset, install graph queries, build graph algorithms, calibrate on both fraud and cleared history, ingest policy documents, and discover residual patterns.
+4. Run `verdict benchmark` to investigate all 20 cases. Full JSON and Markdown outputs are written to `outputs/hhgoa/answers/`; the submission JSONs are copied to [`cases/`](cases/).
 
 ## Answer files
 

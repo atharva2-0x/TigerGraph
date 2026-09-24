@@ -1,0 +1,238 @@
+{
+  "case_id": "HHG-018",
+  "case": {
+    "status": "open",
+    "verdict": "fraud",
+    "fraud_probability": 1.0,
+    "pattern": "out_of_region_use",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3491361",
+      "3491379"
+    ],
+    "first_suspicious_txn_id": "3491361",
+    "connected_card_ids": [
+      "C00854-K2",
+      "C05560-K2",
+      "C11309-K1",
+      "C06079-K1",
+      "C01688-K1",
+      "C03598-K2",
+      "C02902-K2"
+    ],
+    "connected_device_profiles": [],
+    "exposure_usd": 6004.31,
+    "evidence": [
+      {
+        "claim": "Bank model risk score 0.48",
+        "source": "graph",
+        "ref": "transaction.risk_score",
+        "entity_ids": [
+          "3491361",
+          "C02354-K2",
+          "C02354"
+        ],
+        "log_odds_contribution": 0.202,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "5+ transactions on the card in the last 24h (42 txns)",
+        "source": "graph",
+        "ref": "inv_card_velocity",
+        "entity_ids": [
+          "3491361",
+          "C02354-K2",
+          "C02354"
+        ],
+        "log_odds_contribution": -0.131,
+        "effect": "weighs_against_fraud"
+      },
+      {
+        "claim": "2+ address/name match-flag failures",
+        "source": "graph",
+        "ref": "inv_identity_consistency",
+        "entity_ids": [
+          "3491361",
+          "C02354-K2",
+          "C02354"
+        ],
+        "log_odds_contribution": -0.406,
+        "effect": "weighs_against_fraud"
+      },
+      {
+        "claim": "online and in-store activity with new devices inside 48h",
+        "source": "graph",
+        "ref": "inv_identity_consistency",
+        "entity_ids": [
+          "3491361",
+          "C02354-K2",
+          "C02354"
+        ],
+        "log_odds_contribution": 0.16,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "2+ other cards share a device/recipient email with high-risk activity (27 cards via device, recipient_email)",
+        "source": "graph",
+        "ref": "inv_linked_entities",
+        "entity_ids": [
+          "3491361",
+          "C02354-K2",
+          "C02354"
+        ],
+        "log_odds_contribution": 0.306,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "a card sharing a device/recipient email has a confirmed fraud case (64 cards)",
+        "source": "graph",
+        "ref": "inv_linked_entities",
+        "entity_ids": [
+          "3491361",
+          "C02354-K2",
+          "C02354"
+        ],
+        "log_odds_contribution": 0.294,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "the card's WCC component contains cards with confirmed fraud (component of 3860 cards, 993 with fraud)",
+        "source": "graph",
+        "ref": "inv_community",
+        "entity_ids": [
+          "3491361",
+          "C02354-K2",
+          "C02354"
+        ],
+        "log_odds_contribution": 0.121,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "customer/card had a confirmed fraud case before",
+        "source": "graph",
+        "ref": "inv_prior_cases",
+        "entity_ids": [
+          "3491361",
+          "C02354-K2",
+          "C02354"
+        ],
+        "log_odds_contribution": 1.043,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "customer/card had a cleared (false-positive) case before",
+        "source": "graph",
+        "ref": "inv_prior_cases",
+        "entity_ids": [
+          "3491361",
+          "C02354-K2",
+          "C02354"
+        ],
+        "log_odds_contribution": 3.937,
+        "effect": "supports_fraud"
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Customer C02354 message: 'I never made this $39.08 purchase. Please check my card.' Refers to 3491361. Graph evidence supporting fraud included Bank model risk score 0.48; online and in-store activity with new devices inside 48h. Counter-evidence included 5+ transactions on the card in the last 24h (42 txns); 2+ address/name match-flag failures. The calibrated fraud probability is 1.00 (80% interval 1.00\u20131.00); the conclusion is fraud and the best action is PROTECT. Stop and act: best decision PROTECT (expected loss PROTECT $0.00 vs RELEASE $9006.41); decision stability 100%; no evidence request has positive value of information.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-018"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "MONITOR_CONNECTED_CARDS per R6; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "CREATE_CASE per R6, R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      },
+      {
+        "action": "BLOCK_CARD",
+        "route": "L2",
+        "reason": "BLOCK_CARD per R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "FILE_REPORT per R6, R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      }
+    ],
+    "final": [
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "MONITOR_CONNECTED_CARDS per R6; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "CREATE_CASE per R6, R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      },
+      {
+        "action": "BLOCK_CARD",
+        "route": "L2",
+        "reason": "BLOCK_CARD per R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "FILE_REPORT per R6, R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": true,
+    "reason": "Filed under R2: strong suspicion plus exposure exceeds $1,000, shared-entity links to other cards. The filing remains subject to L2 approval.",
+    "narrative": "This report concerns customer C02354 and card C02354-K2. At 2016-11-27 13:41:26, transaction 3491361 for $39.08 was identified. Channel in_person, billing region 126|87. The activity was assessed as OUT_OF_REGION_USE, with calibrated P(fraud) 1.00 and an 80% interval of 1.00\u20131.00. Supporting evidence included Bank model risk score 0.48; online and in-store activity with new devices inside 48h. Evidence weighing against fraud included 5+ transactions on the card in the last 24h (42 txns); 2+ address/name match-flag failures. The graph linked the activity to cards C00854-K2, C05560-K2, C11309-K1, C06079-K1, C01688-K1. The policy recommends MONITOR_CONNECTED_CARDS, CREATE_CASE, BLOCK_CARD, FILE_REPORT; FILE_REPORT requires L2 approval under R2.",
+    "subjects": [
+      "C02354",
+      "C02354-K2",
+      "C00854-K2",
+      "C05560-K2",
+      "C11309-K1",
+      "C06079-K1",
+      "C01688-K1",
+      "C03598-K2",
+      "C02902-K2"
+    ],
+    "total_amount_usd": 6004.31,
+    "activity_dates": [
+      "2016-11-27",
+      "2016-11-27"
+    ]
+  },
+  "stop_reason": "Stop and act: best decision PROTECT (expected loss PROTECT $0.00 vs RELEASE $9006.41); decision stability 100%; no evidence request has positive value of information.",
+  "tool_calls": 13,
+  "tokens": 0,
+  "latency_s": 0.843,
+  "agent": {
+    "name": "VERDICT",
+    "version": "0.1.0",
+    "llm": {
+      "enabled": false,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "calls": 0
+      }
+    },
+    "graph_access": "mcp"
+  },
+  "graph_write_back": {
+    "vertex": "FraudCase/HHG-018",
+    "status": "PENDING_APPROVAL",
+    "evidence_vertices": 10,
+    "evidence_requests": 0,
+    "action_vertices": 8,
+    "linked_transactions": 1,
+    "linked_cards": 16,
+    "similar_case_edges": 0,
+    "verified": true
+  }
+}

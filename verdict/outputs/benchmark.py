@@ -6,7 +6,7 @@ import time
 import pandas as pd
 
 from verdict.agent.orchestrator import Shared, run_case
-from verdict.config import settings
+from verdict.config import ROOT, settings
 from verdict.outputs import answer_writer
 
 
@@ -44,7 +44,12 @@ def run(case_ids: list[str] | None = None, shared: Shared | None = None) -> list
             continue
         t = time.time()
         s = run_case(r.to_dict(), shared, oracle=oracle.get(r["case_id"]))
-        answer_writer.write(s, graph_check=graph_check(shared, r["case_id"]))
+        check = graph_check(shared, r["case_id"])
+        latency = time.time() - t
+        s["latency_s"] = latency
+        answer_writer.write(s, graph_check=check,
+                            submission_dir=ROOT / "cases" if settings.data_dir.name == "hhgoa" else None,
+                            latency_s=latency)
         b, a = s["nba_before_evidence"], s["nba_after_evidence"]
         rows.append({"case": r["case_id"], "trigger": r["trigger_type"], "pattern": a["pattern"], "p_before": round(b["p_fraud"], 3),
                      "nba_before": b["decision"], "evidence": ", ".join(f"{q['kind']}={q.get('response')}" for q in s["evidence_requests"]) or "-",

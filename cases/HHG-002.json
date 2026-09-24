@@ -1,0 +1,136 @@
+{
+  "case_id": "HHG-002",
+  "case": {
+    "status": "open",
+    "verdict": "fraud",
+    "fraud_probability": 0.8269,
+    "pattern": "account_takeover",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3478782"
+    ],
+    "first_suspicious_txn_id": "3478782",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 292.36,
+    "evidence": [
+      {
+        "claim": "Bank model risk score 0.79",
+        "source": "graph",
+        "ref": "transaction.risk_score",
+        "entity_ids": [
+          "3478782",
+          "C11891-K1",
+          "C11891"
+        ],
+        "log_odds_contribution": -3.34,
+        "effect": "weighs_against_fraud"
+      },
+      {
+        "claim": "amount far above the customer's history (z>3 or >2.5x prior max) ($292.36 vs mean $44.66, z=9.8)",
+        "source": "customer",
+        "ref": "inv_customer_baseline",
+        "entity_ids": [
+          "3478782",
+          "C11891-K1",
+          "C11891"
+        ],
+        "log_odds_contribution": -2.797,
+        "effect": "weighs_against_fraud"
+      },
+      {
+        "claim": "the card's WCC component contains cards with confirmed fraud (component of 3860 cards, 993 with fraud)",
+        "source": "graph",
+        "ref": "inv_community",
+        "entity_ids": [
+          "3478782",
+          "C11891-K1",
+          "C11891"
+        ],
+        "log_odds_contribution": 0.121,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "customer/card had a confirmed fraud case before",
+        "source": "graph",
+        "ref": "inv_prior_cases",
+        "entity_ids": [
+          "3478782",
+          "C11891-K1",
+          "C11891"
+        ],
+        "log_odds_contribution": 1.043,
+        "effect": "supports_fraud"
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Real-time model scored transaction 3478782 ($292.36, online) at 0.79. Review and decide. Graph evidence supporting fraud included the card's WCC component contains cards with confirmed fraud (component of 3860 cards, 993 with fraud); customer/card had a confirmed fraud case before. Counter-evidence included Bank model risk score 0.79; amount far above the customer's history (z>3 or >2.5x prior max) ($292.36 vs mean $44.66, z=9.8). The calibrated fraud probability is 0.83 (80% interval 0.78\u20130.87); the conclusion is fraud and the best action is PROTECT. Stop and act: best decision PROTECT (expected loss PROTECT $21.79 vs RELEASE $362.63); decision stability 100%; no evidence request has positive value of information.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-002"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "CREATE_CASE per R2; decision PROTECT at P(fraud)=0.83 (stability 100%)."
+      },
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "BLOCK_CARD per R2; decision PROTECT at P(fraud)=0.83 (stability 100%)."
+      }
+    ],
+    "final": [
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "CREATE_CASE per R2; decision PROTECT at P(fraud)=0.83 (stability 100%)."
+      },
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "BLOCK_CARD per R2; decision PROTECT at P(fraud)=0.83 (stability 100%)."
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "Not filed under R2: the case did not meet the strong-suspicion threshold together with a qualifying exposure, shared-entity, or undocumented-pattern condition.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0,
+    "activity_dates": []
+  },
+  "stop_reason": "Stop and act: best decision PROTECT (expected loss PROTECT $21.79 vs RELEASE $362.63); decision stability 100%; no evidence request has positive value of information.",
+  "tool_calls": 13,
+  "tokens": 0,
+  "latency_s": 0.584,
+  "agent": {
+    "name": "VERDICT",
+    "version": "0.1.0",
+    "llm": {
+      "enabled": false,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "calls": 0
+      }
+    },
+    "graph_access": "mcp"
+  },
+  "graph_write_back": {
+    "vertex": "FraudCase/HHG-002",
+    "status": "PENDING_APPROVAL",
+    "evidence_vertices": 5,
+    "evidence_requests": 0,
+    "action_vertices": 4,
+    "linked_transactions": 1,
+    "linked_cards": 1,
+    "similar_case_edges": 0,
+    "verified": true
+  }
+}

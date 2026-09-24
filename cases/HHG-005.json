@@ -1,0 +1,256 @@
+{
+  "case_id": "HHG-005",
+  "case": {
+    "status": "open",
+    "verdict": "fraud",
+    "fraud_probability": 0.9586,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3523199"
+    ],
+    "first_suspicious_txn_id": "3523199",
+    "connected_card_ids": [
+      "C11496-K2"
+    ],
+    "connected_device_profiles": [
+      "iOS Device (profile DEV-fe5d00fa20)"
+    ],
+    "exposure_usd": 100.07,
+    "evidence": [
+      {
+        "claim": "Bank model risk score 0.54",
+        "source": "graph",
+        "ref": "transaction.risk_score",
+        "entity_ids": [
+          "3523199",
+          "C02923-K1",
+          "C02923"
+        ],
+        "log_odds_contribution": -0.404,
+        "effect": "weighs_against_fraud"
+      },
+      {
+        "claim": "identity record marks the device as new for this account",
+        "source": "graph",
+        "ref": "inv_device_profile",
+        "entity_ids": [
+          "3523199",
+          "C02923-K1",
+          "C02923"
+        ],
+        "log_odds_contribution": -3.873,
+        "effect": "weighs_against_fraud"
+      },
+      {
+        "claim": "device never used by this customer before",
+        "source": "graph",
+        "ref": "inv_device_profile",
+        "entity_ids": [
+          "3523199",
+          "C02923-K1",
+          "C02923"
+        ],
+        "log_odds_contribution": -0.036,
+        "effect": "weighs_against_fraud"
+      },
+      {
+        "claim": "device previously used by 2+ other customers",
+        "source": "graph",
+        "ref": "inv_device_profile",
+        "entity_ids": [
+          "3523199",
+          "C02923-K1",
+          "C02923"
+        ],
+        "log_odds_contribution": 0.186,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "device linked to a previously confirmed fraud case",
+        "source": "graph",
+        "ref": "inv_device_profile",
+        "entity_ids": [
+          "3523199",
+          "C02923-K1",
+          "C02923"
+        ],
+        "log_odds_contribution": 1.181,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "other cards used this device with suspicious activity in the same week",
+        "source": "graph",
+        "ref": "inv_device_profile",
+        "entity_ids": [
+          "3523199",
+          "C02923-K1",
+          "C02923"
+        ],
+        "log_odds_contribution": -0.672,
+        "effect": "weighs_against_fraud"
+      },
+      {
+        "claim": "purchaser email domain never used by the customer before",
+        "source": "graph",
+        "ref": "inv_identity_consistency",
+        "entity_ids": [
+          "3523199",
+          "C02923-K1",
+          "C02923"
+        ],
+        "log_odds_contribution": -0.217,
+        "effect": "weighs_against_fraud"
+      },
+      {
+        "claim": "a card sharing a device/recipient email has a confirmed fraud case (1 cards)",
+        "source": "graph",
+        "ref": "inv_linked_entities",
+        "entity_ids": [
+          "3523199",
+          "C02923-K1",
+          "C02923"
+        ],
+        "log_odds_contribution": 0.294,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "the card's WCC component contains cards with confirmed fraud (component of 3860 cards, 993 with fraud)",
+        "source": "graph",
+        "ref": "inv_community",
+        "entity_ids": [
+          "3523199",
+          "C02923-K1",
+          "C02923"
+        ],
+        "log_odds_contribution": 0.121,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "customer/card had a confirmed fraud case before",
+        "source": "graph",
+        "ref": "inv_prior_cases",
+        "entity_ids": [
+          "3523199",
+          "C02923-K1",
+          "C02923",
+          "CC-1672"
+        ],
+        "log_odds_contribution": 1.043,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "most structurally similar past cases were cleared (fraud share 0.2)",
+        "source": "graph",
+        "ref": "inv_similar_cases",
+        "entity_ids": [
+          "3523199",
+          "C02923-K1",
+          "C02923",
+          "CC-1672"
+        ],
+        "log_odds_contribution": -1.017,
+        "effect": "weighs_against_fraud"
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-1672"
+    ],
+    "summary": "Real-time model scored transaction 3523199 ($100.07, online) at 0.54. Review and decide. Graph evidence supporting fraud included device previously used by 2+ other customers; device linked to a previously confirmed fraud case. Counter-evidence included Bank model risk score 0.54; identity record marks the device as new for this account. The calibrated fraud probability is 0.96 (80% interval 0.94\u20130.98); the conclusion is fraud and the best action is PROTECT. Stop and act: best decision PROTECT (expected loss PROTECT $5.05 vs RELEASE $143.89); decision stability 100%; no evidence request has positive value of information.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-005"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "MONITOR_CONNECTED_CARDS per R6; decision PROTECT at P(fraud)=0.96 (stability 100%)."
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "CREATE_CASE per R6, R2; decision PROTECT at P(fraud)=0.96 (stability 100%)."
+      },
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "BLOCK_CARD per R2; decision PROTECT at P(fraud)=0.96 (stability 100%)."
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "FILE_REPORT per R6, R2; decision PROTECT at P(fraud)=0.96 (stability 100%)."
+      }
+    ],
+    "final": [
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "MONITOR_CONNECTED_CARDS per R6; decision PROTECT at P(fraud)=0.96 (stability 100%)."
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "CREATE_CASE per R6, R2; decision PROTECT at P(fraud)=0.96 (stability 100%)."
+      },
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "BLOCK_CARD per R2; decision PROTECT at P(fraud)=0.96 (stability 100%)."
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "FILE_REPORT per R6, R2; decision PROTECT at P(fraud)=0.96 (stability 100%)."
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": true,
+    "reason": "Filed under R2: strong suspicion plus shared-entity links to other cards. The filing remains subject to L2 approval.",
+    "narrative": "This report concerns customer C02923 and card C02923-K1. At 2016-12-07 21:38:37, transaction 3523199 for $100.07 was identified. Channel online, billing region 330|87. The activity was assessed as CARD_NOT_PRESENT_NEW_DEVICE, with calibrated P(fraud) 0.96 and an 80% interval of 0.94\u20130.98. Supporting evidence included device previously used by 2+ other customers; device linked to a previously confirmed fraud case. Evidence weighing against fraud included Bank model risk score 0.54; identity record marks the device as new for this account. The graph linked the activity to cards C11496-K2. The policy recommends MONITOR_CONNECTED_CARDS, CREATE_CASE, BLOCK_CARD, FILE_REPORT; FILE_REPORT requires L2 approval under R2.",
+    "subjects": [
+      "C02923",
+      "C02923-K1",
+      "C11496-K2",
+      "DEV-fe5d00fa20"
+    ],
+    "total_amount_usd": 100.07,
+    "activity_dates": [
+      "2016-12-07",
+      "2016-12-07"
+    ]
+  },
+  "stop_reason": "Stop and act: best decision PROTECT (expected loss PROTECT $5.05 vs RELEASE $143.89); decision stability 100%; no evidence request has positive value of information.",
+  "tool_calls": 13,
+  "tokens": 0,
+  "latency_s": 0.897,
+  "agent": {
+    "name": "VERDICT",
+    "version": "0.1.0",
+    "llm": {
+      "enabled": false,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "calls": 0
+      }
+    },
+    "graph_access": "mcp"
+  },
+  "graph_write_back": {
+    "vertex": "FraudCase/HHG-005",
+    "status": "PENDING_APPROVAL",
+    "evidence_vertices": 12,
+    "evidence_requests": 0,
+    "action_vertices": 8,
+    "linked_transactions": 1,
+    "linked_cards": 2,
+    "similar_case_edges": 5,
+    "verified": true
+  }
+}

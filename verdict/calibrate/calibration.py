@@ -38,12 +38,23 @@ def _logit(p: float) -> float:
 
 def history_features(workers: int = 8) -> pd.DataFrame:
     cases = pd.read_csv(settings.work_dir / "prepared" / "cases_history.csv", dtype=str).fillna("")
-    cases = cases[cases["trigger_txn_id"] != ""]
+    # HHGOA only records first_fraud_txn_id for confirmed-fraud cases. Cleared
+    # cases still have their alert transaction in case_txn.csv, so use that as
+    # the as-of investigation anchor instead of silently dropping all negative
+    # examples from calibration.
+    case_txns = pd.read_csv(settings.work_dir / "prepared" / "case_txn.csv", dtype=str).fillna("")
+    case_txns["_trigger_rank"] = (case_txns["role"] != "TRIGGER").astype(int)
+    case_txns = case_txns.sort_values(["_trigger_rank"], kind="stable")
+    case_anchor = case_txns.drop_duplicates("case_id").set_index("case_id")["txn_id"]
+    cases["feature_txn_id"] = cases["trigger_txn_id"]
+    missing_anchor = cases["feature_txn_id"] == ""
+    cases.loc[missing_anchor, "feature_txn_id"] = cases.loc[missing_anchor, "case_id"].map(case_anchor).fillna("")
+    cases = cases[cases["feature_txn_id"] != ""]
     gw = DirectGateway(profile="ops")
 
     def one(row):
         try:
-            raw = collect_core(gw, row["trigger_txn_id"], parallel=False)
+            raw = collect_core(gw, row["feature_txn_id"], parallel=False)
             s, f = derive_signals(raw, exclude_case_id=row["case_id"])
             return {"case_id": row["case_id"], "outcome": row["outcome"], "pattern": row["pattern"], "opened_at": row["opened_at"],
                     "evidence_requested": row["evidence_requested"], "evidence_result": row["evidence_result"],

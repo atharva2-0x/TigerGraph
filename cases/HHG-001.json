@@ -1,0 +1,119 @@
+{
+  "case_id": "HHG-001",
+  "case": {
+    "status": "open",
+    "verdict": "fraud",
+    "fraud_probability": 0.9984,
+    "pattern": "account_takeover",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3514030"
+    ],
+    "first_suspicious_txn_id": "3514030",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 77.07,
+    "evidence": [
+      {
+        "claim": "Bank model risk score 0.61",
+        "source": "graph",
+        "ref": "transaction.risk_score",
+        "entity_ids": [
+          "3514030",
+          "C12382-K1",
+          "C12382"
+        ],
+        "log_odds_contribution": -1.128,
+        "effect": "weighs_against_fraud"
+      },
+      {
+        "claim": "customer/card had a confirmed fraud case before",
+        "source": "graph",
+        "ref": "inv_prior_cases",
+        "entity_ids": [
+          "3514030",
+          "C12382-K1",
+          "C12382",
+          "CC-0145",
+          "CC-5218",
+          "CC-0033"
+        ],
+        "log_odds_contribution": 1.043,
+        "effect": "supports_fraud"
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-0145",
+      "CC-5218",
+      "CC-0033"
+    ],
+    "summary": "Real-time model scored transaction 3514030 ($77.07, in billing region 444.0) at 0.61. Review and decide. Graph evidence supporting fraud included customer/card had a confirmed fraud case before. Counter-evidence included Bank model risk score 0.61. The calibrated fraud probability is 1.00 (80% interval 1.00\u20131.00); the conclusion is fraud and the best action is PROTECT. Stop and act: best decision PROTECT (expected loss PROTECT $0.19 vs RELEASE $618.67); decision stability 100%; no evidence request has positive value of information.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-001"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "CREATE_CASE per R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      },
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "BLOCK_CARD per R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      }
+    ],
+    "final": [
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "CREATE_CASE per R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      },
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "BLOCK_CARD per R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "Not filed under R2: the case did not meet the strong-suspicion threshold together with a qualifying exposure, shared-entity, or undocumented-pattern condition.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0,
+    "activity_dates": []
+  },
+  "stop_reason": "Stop and act: best decision PROTECT (expected loss PROTECT $0.19 vs RELEASE $618.67); decision stability 100%; no evidence request has positive value of information.",
+  "tool_calls": 13,
+  "tokens": 0,
+  "latency_s": 0.569,
+  "agent": {
+    "name": "VERDICT",
+    "version": "0.1.0",
+    "llm": {
+      "enabled": false,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "calls": 0
+      }
+    },
+    "graph_access": "mcp"
+  },
+  "graph_write_back": {
+    "vertex": "FraudCase/HHG-001",
+    "status": "PENDING_APPROVAL",
+    "evidence_vertices": 4,
+    "evidence_requests": 0,
+    "action_vertices": 4,
+    "linked_transactions": 1,
+    "linked_cards": 1,
+    "similar_case_edges": 11,
+    "verified": true
+  }
+}

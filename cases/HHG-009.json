@@ -1,0 +1,200 @@
+{
+  "case_id": "HHG-009",
+  "case": {
+    "status": "open",
+    "verdict": "fraud",
+    "fraud_probability": 1.0,
+    "pattern": "account_takeover",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3581141"
+    ],
+    "first_suspicious_txn_id": "3581141",
+    "connected_card_ids": [
+      "C00854-K2",
+      "C05560-K2",
+      "C04258-K1",
+      "C03070-K1",
+      "C10757-K2",
+      "C02804-K1",
+      "C05868-K1",
+      "C00750-K2",
+      "C01333-K2"
+    ],
+    "connected_device_profiles": [],
+    "exposure_usd": 30.02,
+    "evidence": [
+      {
+        "claim": "Bank model risk score 0.28",
+        "source": "graph",
+        "ref": "transaction.risk_score",
+        "entity_ids": [
+          "3581141",
+          "C08299-K1",
+          "C08299"
+        ],
+        "log_odds_contribution": 2.381,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "2+ other cards share a device/recipient email with high-risk activity (8 cards via device)",
+        "source": "graph",
+        "ref": "inv_linked_entities",
+        "entity_ids": [
+          "3581141",
+          "C08299-K1",
+          "C08299"
+        ],
+        "log_odds_contribution": 0.306,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "a card sharing a device/recipient email has a confirmed fraud case (10 cards)",
+        "source": "graph",
+        "ref": "inv_linked_entities",
+        "entity_ids": [
+          "3581141",
+          "C08299-K1",
+          "C08299"
+        ],
+        "log_odds_contribution": 0.294,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "the card's WCC component contains cards with confirmed fraud (component of 3860 cards, 993 with fraud)",
+        "source": "graph",
+        "ref": "inv_community",
+        "entity_ids": [
+          "3581141",
+          "C08299-K1",
+          "C08299"
+        ],
+        "log_odds_contribution": 0.121,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "most structurally similar past cases were confirmed fraud (fraud share 1.0)",
+        "source": "graph",
+        "ref": "inv_similar_cases",
+        "entity_ids": [
+          "3581141",
+          "C08299-K1",
+          "C08299",
+          "CC-1726",
+          "CC-2945",
+          "CC-0824"
+        ],
+        "log_odds_contribution": 0.549,
+        "effect": "supports_fraud"
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-1726",
+      "CC-2945",
+      "CC-0824"
+    ],
+    "summary": "Customer C08299 message: 'I never made this $30.02 purchase. Please check my card.' Refers to 3581141. Graph evidence supporting fraud included Bank model risk score 0.28; 2+ other cards share a device/recipient email with high-risk activity (8 cards via device). The calibrated fraud probability is 1.00 (80% interval 1.00\u20131.00); the conclusion is fraud and the best action is PROTECT. Stop and act: best decision PROTECT (expected loss PROTECT $0.00 vs RELEASE $45.03); decision stability 100%; no evidence request has positive value of information.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-009"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "MONITOR_CONNECTED_CARDS per R6; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "CREATE_CASE per R6, R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      },
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "BLOCK_CARD per R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "FILE_REPORT per R6, R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      }
+    ],
+    "final": [
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "MONITOR_CONNECTED_CARDS per R6; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "CREATE_CASE per R6, R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      },
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "BLOCK_CARD per R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "FILE_REPORT per R6, R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": true,
+    "reason": "Filed under R2: strong suspicion plus shared-entity links to other cards. The filing remains subject to L2 approval.",
+    "narrative": "This report concerns customer C08299 and card C08299-K1. At 2016-12-28 12:10:53, transaction 3581141 for $30.02 was identified. Channel online, billing region 203|87. The activity was assessed as ACCOUNT_TAKEOVER, with calibrated P(fraud) 1.00 and an 80% interval of 1.00\u20131.00. Supporting evidence included Bank model risk score 0.28; 2+ other cards share a device/recipient email with high-risk activity (8 cards via device). Evidence weighing against fraud included no material contradictory graph signal recorded. The graph linked the activity to cards C00854-K2, C05560-K2, C04258-K1, C03070-K1, C10757-K2. The policy recommends MONITOR_CONNECTED_CARDS, CREATE_CASE, BLOCK_CARD, FILE_REPORT; FILE_REPORT requires L2 approval under R2.",
+    "subjects": [
+      "C08299",
+      "C08299-K1",
+      "C00854-K2",
+      "C05560-K2",
+      "C04258-K1",
+      "C03070-K1",
+      "C10757-K2",
+      "C02804-K1",
+      "C05868-K1",
+      "C00750-K2",
+      "C01333-K2"
+    ],
+    "total_amount_usd": 30.02,
+    "activity_dates": [
+      "2016-12-28",
+      "2016-12-28"
+    ]
+  },
+  "stop_reason": "Stop and act: best decision PROTECT (expected loss PROTECT $0.00 vs RELEASE $45.03); decision stability 100%; no evidence request has positive value of information.",
+  "tool_calls": 13,
+  "tokens": 0,
+  "latency_s": 0.777,
+  "agent": {
+    "name": "VERDICT",
+    "version": "0.1.0",
+    "llm": {
+      "enabled": false,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "calls": 0
+      }
+    },
+    "graph_access": "mcp"
+  },
+  "graph_write_back": {
+    "vertex": "FraudCase/HHG-009",
+    "status": "PENDING_APPROVAL",
+    "evidence_vertices": 6,
+    "evidence_requests": 0,
+    "action_vertices": 8,
+    "linked_transactions": 1,
+    "linked_cards": 16,
+    "similar_case_edges": 17,
+    "verified": true
+  }
+}

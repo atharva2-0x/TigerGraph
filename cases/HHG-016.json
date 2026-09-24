@@ -1,0 +1,195 @@
+{
+  "case_id": "HHG-016",
+  "case": {
+    "status": "open",
+    "verdict": "fraud",
+    "fraud_probability": 0.9952,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3534820"
+    ],
+    "first_suspicious_txn_id": "3534820",
+    "connected_card_ids": [],
+    "connected_device_profiles": [
+      "Windows (profile DEV-ca350e7d2d)"
+    ],
+    "exposure_usd": 59.67,
+    "evidence": [
+      {
+        "claim": "Bank model risk score 0.37",
+        "source": "graph",
+        "ref": "transaction.risk_score",
+        "entity_ids": [
+          "3534820",
+          "C09988-K1",
+          "C09988"
+        ],
+        "log_odds_contribution": 1.342,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "identity record marks the device as new for this account",
+        "source": "graph",
+        "ref": "inv_device_profile",
+        "entity_ids": [
+          "3534820",
+          "C09988-K1",
+          "C09988"
+        ],
+        "log_odds_contribution": -3.873,
+        "effect": "weighs_against_fraud"
+      },
+      {
+        "claim": "device never used by this customer before",
+        "source": "graph",
+        "ref": "inv_device_profile",
+        "entity_ids": [
+          "3534820",
+          "C09988-K1",
+          "C09988"
+        ],
+        "log_odds_contribution": -0.036,
+        "effect": "weighs_against_fraud"
+      },
+      {
+        "claim": "device previously used by 2+ other customers",
+        "source": "graph",
+        "ref": "inv_device_profile",
+        "entity_ids": [
+          "3534820",
+          "C09988-K1",
+          "C09988"
+        ],
+        "log_odds_contribution": 0.186,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "device linked to a previously confirmed fraud case",
+        "source": "graph",
+        "ref": "inv_device_profile",
+        "entity_ids": [
+          "3534820",
+          "C09988-K1",
+          "C09988"
+        ],
+        "log_odds_contribution": 1.181,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "other cards used this device with suspicious activity in the same week",
+        "source": "graph",
+        "ref": "inv_device_profile",
+        "entity_ids": [
+          "3534820",
+          "C09988-K1",
+          "C09988"
+        ],
+        "log_odds_contribution": -0.672,
+        "effect": "weighs_against_fraud"
+      },
+      {
+        "claim": "the card's WCC component contains cards with confirmed fraud (component of 3860 cards, 993 with fraud)",
+        "source": "graph",
+        "ref": "inv_community",
+        "entity_ids": [
+          "3534820",
+          "C09988-K1",
+          "C09988"
+        ],
+        "log_odds_contribution": 0.121,
+        "effect": "supports_fraud"
+      },
+      {
+        "claim": "most structurally similar past cases were confirmed fraud (fraud share 1.0)",
+        "source": "graph",
+        "ref": "inv_similar_cases",
+        "entity_ids": [
+          "3534820",
+          "C09988-K1",
+          "C09988",
+          "CC-2732",
+          "CC-3491",
+          "CC-3580",
+          "CC-2694"
+        ],
+        "log_odds_contribution": 0.549,
+        "effect": "supports_fraud"
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2732",
+      "CC-3491",
+      "CC-3580",
+      "CC-2694"
+    ],
+    "summary": "Customer C09988 message: 'I never made this $59.67 purchase. Please check my card.' Refers to 3534820. Graph evidence supporting fraud included Bank model risk score 0.37; device previously used by 2+ other customers. Counter-evidence included identity record marks the device as new for this account; device never used by this customer before. The calibrated fraud probability is 1.00 (80% interval 0.99\u20131.00); the conclusion is fraud and the best action is PROTECT. Stop and act: best decision PROTECT (expected loss PROTECT $0.58 vs RELEASE $89.08); decision stability 100%; no evidence request has positive value of information.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-016"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "CREATE_CASE per R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      },
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "BLOCK_CARD per R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      }
+    ],
+    "final": [
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "CREATE_CASE per R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      },
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "BLOCK_CARD per R2; decision PROTECT at P(fraud)=1.00 (stability 100%)."
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "Not filed under R2: the case did not meet the strong-suspicion threshold together with a qualifying exposure, shared-entity, or undocumented-pattern condition.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0,
+    "activity_dates": []
+  },
+  "stop_reason": "Stop and act: best decision PROTECT (expected loss PROTECT $0.58 vs RELEASE $89.08); decision stability 100%; no evidence request has positive value of information.",
+  "tool_calls": 13,
+  "tokens": 0,
+  "latency_s": 0.582,
+  "agent": {
+    "name": "VERDICT",
+    "version": "0.1.0",
+    "llm": {
+      "enabled": false,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "calls": 0
+      }
+    },
+    "graph_access": "mcp"
+  },
+  "graph_write_back": {
+    "vertex": "FraudCase/HHG-016",
+    "status": "PENDING_APPROVAL",
+    "evidence_vertices": 9,
+    "evidence_requests": 0,
+    "action_vertices": 4,
+    "linked_transactions": 1,
+    "linked_cards": 1,
+    "similar_case_edges": 10,
+    "verified": true
+  }
+}
